@@ -3,9 +3,23 @@ package ru.zont.topbuilder.ui.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class TopList extends ArrayList<TopItem> implements Parcelable {
+
+    public TopList() { }
+
+    public TopList(@NonNull Collection<? extends TopItem> c) {
+        super(c);
+    }
+
+    public TopList(int initialCapacity) {
+        super(initialCapacity);
+    }
+
     protected TopList(Parcel in) {
         in.readTypedList(this, TopItem.CREATOR);
     }

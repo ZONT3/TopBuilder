@@ -15,4 +15,6 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
     protected void addUndoAction(Runnable undo) {
         undoStack.add(undo);
     }
+
+    // TODO extract code for next() - provideDecision(int) routine
 }

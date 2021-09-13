@@ -17,13 +17,19 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
     }
 
     @Override
-    public void next(Comparator<T> compare) {
+    public void next(Supplier<T> supplier) {
         if (!hasNext()) return;
+        supplier.provide(currLhs.value, currRhs.value);
+    }
+
+    @Override
+    public void provideDecision(int weight) {
+        if (!validation) throw new IllegalStateException("Choice wasn't instanced");
+        if (!hasNext()) throw new IllegalStateException("Top is already built");
 
         final Entry mCurrLhs = this.currLhs;
         final Entry mCurrRhs = this.currRhs;
 
-        final int weight = compare.apply(mCurrLhs.value, mCurrRhs.value);
         final Entry applyTo = weight > 0 ? mCurrRhs : mCurrLhs;
 
         if (weight == 0) {

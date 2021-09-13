@@ -7,6 +7,11 @@ public class TopItem implements Parcelable {
     private String title;
     private String image;
 
+    public TopItem(String title, String image) {
+        this.title = title;
+        this.image = image;
+    }
+
     protected TopItem(Parcel in) {
         title = in.readString();
         image = in.readString();

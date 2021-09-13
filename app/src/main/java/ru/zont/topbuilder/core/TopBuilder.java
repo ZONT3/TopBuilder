@@ -3,7 +3,9 @@ package ru.zont.topbuilder.core;
 import java.util.List;
 
 public interface TopBuilder<T> {
-    void next(Comparator<T> compare);
+    void next(Supplier<T> supplier);
+
+    void provideDecision(int decision);
 
     void undo();
 
@@ -16,7 +18,7 @@ public interface TopBuilder<T> {
 
     List<T> getResults();
 
-    interface Comparator<T> {
-        int apply(T lhs, T rhs);
+    interface Supplier<T> {
+        void provide(T lhs, T rhs);
     }
 }
