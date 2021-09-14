@@ -3,6 +3,8 @@ package ru.zont.topbuilder.ui.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class TopItem implements Parcelable {
     private String title;
     private String image;
@@ -54,5 +56,11 @@ public class TopItem implements Parcelable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return title;
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TopBuilder</string>
+    <string name="action_rhs">Right hand side</string>
+    <string name="action_lhs">Left hand side</string>
 </resources>

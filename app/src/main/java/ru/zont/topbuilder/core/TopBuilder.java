@@ -1,7 +1,5 @@
 package ru.zont.topbuilder.core;
 
-import java.util.List;
-
 public interface TopBuilder<T> {
     void next(Supplier<T> supplier);
 
@@ -16,7 +14,7 @@ public interface TopBuilder<T> {
 
     boolean hasNext();
 
-    List<T> getResults();
+    TopResult<T> getResults();
 
     interface Supplier<T> {
         void provide(T lhs, T rhs);

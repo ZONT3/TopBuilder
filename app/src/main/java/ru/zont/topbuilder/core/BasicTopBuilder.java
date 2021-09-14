@@ -8,7 +8,8 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
 
     @Override
     public void undo() {
-        final Runnable todo = undoStack.pop();
+        final Runnable todo = undoStack.pollLast();
+        if (todo == null) return;
         todo.run();
     }
 

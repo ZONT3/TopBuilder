@@ -1,5 +1,7 @@
 package ru.zont.topbuilder.core;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -29,22 +31,22 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
 
         final Entry mCurrLhs = this.currLhs;
         final Entry mCurrRhs = this.currRhs;
-
         final Entry applyTo = weight > 0 ? mCurrRhs : mCurrLhs;
 
-        if (weight == 0) {
-            mCurrRhs.addToSkip(mCurrLhs);
-            mCurrLhs.addToSkip(mCurrRhs);
+        mCurrRhs.setRelation(mCurrLhs, weight);
+        mCurrLhs.setRelation(mCurrRhs, -weight);
 
-            addUndoAction(() -> {
-                mCurrRhs.cancelSkip(mCurrLhs);
-                mCurrLhs.cancelSkip(mCurrRhs);
-            });
-        } else {
-            final int abs = Math.abs(weight);
-            applyTo.weight += abs;
-            addUndoAction(() -> applyTo.weight -= abs);
-        }
+        final int abs = Math.abs(weight);
+        applyTo.weight += abs;
+
+        addUndoAction(() -> {
+            mCurrRhs.cancelRelation(mCurrLhs);
+            mCurrLhs.cancelRelation(mCurrRhs);
+            applyTo.weight -= abs;
+            currLhs = mCurrLhs;
+            currRhs = mCurrRhs;
+            validation = true;
+        });
 
         validation = false;
     }
@@ -56,14 +58,23 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
     }
 
     @Override
-    public List<T> getResults() {
-        return unwrap(list);
-    }
+    public TopResult<T> getResults() {
+        ArrayList<Entry> list = this.list;
+        if (hasNext()) {
+            list = new ArrayList<>(list);
+            Collections.sort(list, (l, r) -> r.weight - l.weight);
+        }
 
-    @Override
-    public void undo() {
-        validation = false;
-        super.undo();
+        TopResult<T> res = new TopResult<>();
+        int place = 1;
+        Entry prev = null;
+        for (Entry entry : list) {
+            if (prev != null && entry.isLesserThan(prev))
+                place++;
+            res.put(place, entry.value);
+            prev = entry;
+        }
+        return res;
     }
 
     private void findNext() {
@@ -75,7 +86,7 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
             for (int j = 0; j < n-i-1; j++) {
                 Entry lhs = list.get(j);
                 Entry rhs = list.get(j + 1);
-                if (lhs.weight < rhs.weight) {
+                if (lhs.isLesserThan(rhs)) {
                     list.set(j, rhs);
                     list.set(j+1, lhs);
                 } else if (lhs.weight == rhs.weight && !lhs.shouldSkip(rhs)) {
@@ -92,16 +103,6 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
         validation = true;
     }
 
-    private List<T> unwrap(ArrayList<Entry> list) {
-        if (hasNext()) {
-            list = new ArrayList<>(list);
-            Collections.sort(list, (l, r) -> r.weight - l.weight);
-        }
-        ArrayList<T> ts = new ArrayList<>();
-        for (Entry e : list) ts.add(e.value);
-        return ts;
-    }
-
     private ArrayList<Entry> wrap(List<T> list) {
         ArrayList<Entry> res = new ArrayList<>();
         for (T t : list) res.add(new Entry(t));
@@ -110,25 +111,40 @@ public class WeightTop<T> extends BasicTopBuilder<T> {
 
     private class Entry {
         final T value;
-        final IdentityHashMap<T, Boolean> toSkip;
+        final IdentityHashMap<T, Integer> relatives;
         int weight;
 
         private Entry(T t) {
             value = t;
-            toSkip = new IdentityHashMap<>();
+            relatives = new IdentityHashMap<>();
             weight = 0;
         }
 
-        private void addToSkip(Entry t) {
-            toSkip.put(t.value, true);
+        private void cancelRelation(Entry e) {
+            relatives.remove(e.value);
         }
 
-        private void cancelSkip(Entry e) {
-            toSkip.remove(e.value);
+        private void setRelation(Entry e, int r) {
+            relatives.put(e.value, r);
         }
 
         private boolean shouldSkip(Entry t) {
-            return toSkip.containsKey(t.value);
+            final Integer i = relatives.get(t.value);
+            return i != null;
+        }
+
+        public boolean isLesserThan(Entry rhs) {
+            if (weight < rhs.weight) return true;
+            if (weight > rhs.weight) return false;
+
+            final Integer i = relatives.get(rhs.value);
+            return i != null && i < 0;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return String.format("%s (%s)", value.toString(), weight);
         }
     }
 }
