@@ -19,13 +19,28 @@ public class TopResult<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public void forEach(@NonNull BiConsumer<? super Integer, ? super T> action) {
-        for (int i = 1; map.containsKey(i); i++){
-            final ArrayList<T> ts = map.get(i);
+    public void forEach(@NonNull BiConsumer<Integer, T> action) {
+        forEachList((i, ts) -> {
             for (T t : ts != null ? ts : (List<T>) Collections.emptyList()) {
                 action.accept(i, t);
             }
+        });
+    }
+
+    public void forEachList(@NonNull BiConsumer<Integer, ArrayList<T>> action) {
+        for (int i = 1; map.containsKey(i); i++){
+            final ArrayList<T> ts = map.get(i);
+            if (ts != null)
+                action.accept(i, ts);
         }
+    }
+
+    public ArrayList<T> get(int i) {
+        return map.get(i+1);
+    }
+
+    public int size() {
+        return map.size();
     }
 
     @NonNull
