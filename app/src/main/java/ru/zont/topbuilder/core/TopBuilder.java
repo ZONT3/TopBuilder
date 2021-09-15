@@ -57,4 +57,12 @@ public interface TopBuilder<T> {
     interface Supplier<T> {
         void provide(T lhs, T rhs);
     }
+
+    interface BiConsumer<T, U> {
+        void accept(T t, U u);
+    }
+
+    interface Consumer<T> {
+        void accept(T t);
+    }
 }

@@ -19,7 +19,7 @@ public class TopResult<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public void forEach(@NonNull BiConsumer<Integer, T> action) {
+    public void forEach(@NonNull TopBuilder.BiConsumer<Integer, T> action) {
         forEachList((i, ts) -> {
             for (T t : ts != null ? ts : (List<T>) Collections.emptyList()) {
                 action.accept(i, t);
@@ -27,7 +27,7 @@ public class TopResult<T> {
         });
     }
 
-    public void forEachList(@NonNull BiConsumer<Integer, ArrayList<T>> action) {
+    public void forEachList(@NonNull TopBuilder.BiConsumer<Integer, ArrayList<T>> action) {
         for (int i = 1; map.containsKey(i); i++){
             final ArrayList<T> ts = map.get(i);
             if (ts != null)
@@ -55,7 +55,4 @@ public class TopResult<T> {
         return sb.toString();
     }
 
-    public interface BiConsumer<T, U> {
-        void accept(T t, U u);
-    }
 }

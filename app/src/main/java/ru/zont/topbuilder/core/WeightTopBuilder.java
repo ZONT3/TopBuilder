@@ -7,15 +7,22 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 
-public class WeightTopBuilder<T> extends BasicTopBuilder<T> {
+public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements TrackableProgress {
     private final ArrayList<Entry> list;
 
     private Entry currLhs;
     private Entry currRhs;
     private boolean validation = false;
 
+    private final int decisionTotal;
+    private int checked = 0;
+    private BiConsumer<Integer, Integer> progressListener;
+
     public WeightTopBuilder(List<T> list) {
         this.list = wrap(list);
+        int c = 0;
+        for (int i = 1; i < list.size(); i++) c += i;
+        decisionTotal = c;
     }
 
     @Override
@@ -39,6 +46,12 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> {
         final int abs = Math.abs(weight);
         applyTo.weight += abs;
 
+        checked++;
+        if (progressListener != null)
+            progressListener.accept(checked, decisionTotal);
+
+        validation = false;
+
         addUndoAction(() -> {
             mCurrRhs.cancelRelation(mCurrLhs);
             mCurrLhs.cancelRelation(mCurrRhs);
@@ -46,9 +59,11 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> {
             currLhs = mCurrLhs;
             currRhs = mCurrRhs;
             validation = true;
-        });
 
-        validation = false;
+            checked--;
+            if (progressListener != null)
+                progressListener.accept(checked, decisionTotal);
+        });
     }
 
     @Override
@@ -107,6 +122,12 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> {
         ArrayList<Entry> res = new ArrayList<>();
         for (T t : list) res.add(new Entry(t));
         return res;
+    }
+
+    @Override
+    public void setProgressListener(BiConsumer<Integer, Integer> consumer) {
+        progressListener = consumer;
+        progressListener.accept(checked, decisionTotal);
     }
 
     private class Entry {

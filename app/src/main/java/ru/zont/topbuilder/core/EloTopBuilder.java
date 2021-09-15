@@ -2,16 +2,21 @@ package ru.zont.topbuilder.core;
 
 import java.util.*;
 
-public class EloTopBuilder<T> extends BasicTopBuilder<T> {
+public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackableProgress {
 
     private final IdentityHashMap<T, Integer> ratingMap = new IdentityHashMap<>();
     private final List<Pair<T, T>> pairs = new ArrayList<>();
+
+    private final int decisionTotal;
+    private int checked = 0;
+    private BiConsumer<Integer, Integer> progressListener;
 
     private Pair<T, T> currPair;
 
     public EloTopBuilder(List<T> tifor) {
         for (T t: tifor) ratingMap.put(t, 400);
 
+        int c = 0;
         Set<T> keySet = ratingMap.keySet();
         IdentityHashMap<Object, Boolean> check = new IdentityHashMap<>();
         for (T t: keySet) {
@@ -19,10 +24,11 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> {
                 if (check.containsKey(d)) continue;
                 if (t == d) continue;
                 pairs.add(new Pair<>(t, d));
+                c++;
             }
             check.put(t, true);
         }
-
+        decisionTotal = c;
     }
 
     @Override
@@ -52,14 +58,21 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> {
         ratingMap.put(currPair.left, (int) (aRat + deltaA));
         ratingMap.put(currPair.right, (int) (bRat + deltaB));
 
+        this.currPair.isCheck = true;
+        checked++;
+        if (progressListener != null)
+            progressListener.accept(checked, decisionTotal);
+
         final Pair<T, T> finalPair = this.currPair;
         addUndoAction(() -> {
             ratingMap.put(finalPair.left, aRat);
             ratingMap.put(finalPair.right, bRat);
             finalPair.isCheck = false;
-        });
 
-        this.currPair.isCheck = true;
+            checked--;
+            if (progressListener != null)
+                progressListener.accept(checked, decisionTotal);
+        });
     }
 
     @Override
@@ -107,6 +120,12 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> {
 
     public IdentityHashMap<T, Integer> getRatingMap() {
         return ratingMap;
+    }
+
+    @Override
+    public void setProgressListener(BiConsumer<Integer, Integer> consumer) {
+        progressListener = consumer;
+        progressListener.accept(checked, decisionTotal);
     }
 
     private static class Pair<T, D> {

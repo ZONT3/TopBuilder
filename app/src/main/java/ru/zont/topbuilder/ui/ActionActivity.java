@@ -1,5 +1,6 @@
 package ru.zont.topbuilder.ui;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ru.zont.topbuilder.R;
 import ru.zont.topbuilder.core.EloTopBuilder;
 import ru.zont.topbuilder.core.TopBuilder;
+import ru.zont.topbuilder.core.TrackableProgress;
+import ru.zont.topbuilder.core.WeightTopBuilder;
 import ru.zont.topbuilder.ui.data.TopBuilderInfo;
 import ru.zont.topbuilder.ui.data.TopItem;
 import ru.zont.topbuilder.ui.data.TopList;
@@ -57,6 +60,11 @@ public class ActionActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     private void setupAction(TopList list, TopBuilderInfo<? extends TopBuilder<? extends TopItem>> info) {
         topInstance = (TopBuilder<TopItem>) info.newBuilderInstance(this, list);
+
+        if (topInstance instanceof TrackableProgress) {
+            ((TrackableProgress) topInstance).setProgressListener(this::onProgressChange);
+        }
+
         nextPair();
     }
 
@@ -80,6 +88,18 @@ public class ActionActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.action_container, fragment, FRAGMENT_TAG)
                 .commit();
+    }
+
+    private void onProgressChange(int i, int total) {
+        runOnUiThread(() -> {
+            final ActionBar ab = getSupportActionBar();
+            if (ab == null || topInstance == null) return;
+
+            String str = topInstance instanceof WeightTopBuilder
+                    ? getString(R.string.action_progress_weight)
+                    : getString(R.string.action_progress);
+            ab.setSubtitle(String.format(str, i, total));
+        });
     }
 
     private void transitToNext(TopItem lhs, TopItem rhs) {

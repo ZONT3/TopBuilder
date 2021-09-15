@@ -5,4 +5,6 @@
     <string name="info_elo">Elo Rating</string>
     <string name="info_elo_desc">Top built on Elo rating system. User need to compare each other element. Better accuracy, than Weight method, but constantly need large amount of decisions.</string>
     <string name="info_weight">Weight-based</string>
+    <string name="action_progress_weight">%d / ?? (actual) / %d (max)</string>
+    <string name="action_progress">%d / %d</string>
 </resources>

@@ -3,10 +3,7 @@ package ru.zont.topbuilder.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.TableRow;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,56 +11,33 @@ import java.lang.reflect.Constructor;
 
 import ru.zont.topbuilder.core.TopBuilder;
 import ru.zont.topbuilder.databinding.ActivityMainBinding;
-import ru.zont.topbuilder.databinding.FragmentMainButtonBinding;
-import ru.zont.topbuilder.ui.data.info.EloTopBuilderInfo;
 import ru.zont.topbuilder.ui.data.TopBuilderInfo;
 import ru.zont.topbuilder.ui.data.TopItem;
 import ru.zont.topbuilder.ui.data.TopList;
+import ru.zont.topbuilder.ui.data.info.EloTopBuilderInfo;
 import ru.zont.topbuilder.ui.data.info.WeightTopBuilderInfo;
 
 public class MainActivity extends AppCompatActivity {
 
     private TopList providedList;
-    private ActivityMainBinding binding;
-
-    private boolean odd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        providedList = tempList2();
+        providedList = tempList3();
 
-//        registerBuilder(new EloTopBuilderInfo());
-//        registerBuilder(new WeightTopBuilderInfo());
+        binding.btW.setOnClickListener(v -> onClickButton(new WeightTopBuilderInfo()));
+        binding.btE.setOnClickListener(v -> onClickButton(new EloTopBuilderInfo()));
+    }
 
+    private <T extends TopBuilder<? extends TopItem>> void onClickButton(TopBuilderInfo<T> info) {
         final Intent intent = new Intent(MainActivity.this, ActionActivity.class);
         intent.putExtra("z.top.list", (Parcelable) providedList);
-        intent.putExtra("z.top.class", EloTopBuilderInfo.class);
+        intent.putExtra("z.top.class", info.getClass());
         startActivity(intent);
-
-        finish();
-    }
-
-    private <T extends TopBuilder<? extends TopItem>> void registerBuilder(TopBuilderInfo<T> info) {
-        addButton(info.getTitle(this), info.getImage(this), v -> {
-            final Intent intent = new Intent(MainActivity.this, ActionActivity.class);
-            intent.putExtra("z.top.list", (Parcelable) providedList);
-            intent.putExtra("z.top.class", info.getClass());
-            startActivity(intent);
-        });
-    }
-
-    private void addButton(String title, @DrawableRes int drawable, View.OnClickListener onClick) {
-        FragmentMainButtonBinding b = FragmentMainButtonBinding.inflate(getLayoutInflater());
-        b.mainButtText.setText(title);
-        b.mainButtImg.setImageResource(drawable);
-        b.getRoot().setOnClickListener(onClick);
-
-        final TableRow row = odd ? binding.mainRow2 : binding.mainRow1;
-        row.addView(b.getRoot());
-        odd = !odd;
     }
 
     @SuppressWarnings("unchecked")
@@ -82,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return info;
+    }
+
+    private TopList tempList3() {
+        return new TopList() {{
+            add(new TopItem("M870", "https://iopwiki.com/images/3/3d/M870_S.png"));
+            add(new TopItem("El Fail", "https://iopwiki.com/images/thumb/b/be/Fail_S.png/128px-Fail_S.png"));
+            add(new TopItem("GSh-18", "https://iopwiki.com/images/thumb/5/5d/GSh-18_S.png/128px-GSh-18_S.png"));
+            add(new TopItem("AN-94", "https://iopwiki.com/images/thumb/3/3b/AN-94_S.png/128px-AN-94_S.png"));
+            add(new TopItem("RO635", "https://iopwiki.com/images/thumb/5/5a/RO635_S.png/128px-RO635_S.png"));
+        }};
     }
 
     private TopList tempList2() {
@@ -110,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("SAA", "https://iopwiki.com/images/thumb/a/a3/Colt_Revolver_S.png/128px-Colt_Revolver_S.png"));
             add(new TopItem("M1911", "https://iopwiki.com/images/thumb/b/b7/M1911_S.png/128px-M1911_S.png"));
 //            add(new TopItem("M9", "https://iopwiki.com/images/thumb/0/0a/M9_S.png/128px-M9_S.png"));
-//            add(new TopItem("Python", "https://iopwiki.com/images/thumb/9/98/Python_S.png/128px-Python_S.png"));
+            add(new TopItem("Python", "https://iopwiki.com/images/thumb/9/98/Python_S.png/128px-Python_S.png"));
 //            add(new TopItem("M1895", "https://iopwiki.com/images/thumb/1/1d/Nagant_Revolver_S.png/128px-Nagant_Revolver_S.png"));
 //            add(new TopItem("Tokarev", "https://iopwiki.com/images/thumb/7/7f/Tokarev_S.png/128px-Tokarev_S.png"));
 //            add(new TopItem("Stechkin", "https://iopwiki.com/images/thumb/f/f4/Stechkin_S.png/128px-Stechkin_S.png"));
@@ -125,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("Thompson", "https://iopwiki.com/images/thumb/5/5d/Thompson_S.png/128px-Thompson_S.png"));
 //            add(new TopItem("M3", "https://iopwiki.com/images/thumb/5/5f/M3_S.png/128px-M3_S.png"));
 //            add(new TopItem("Ingram", "https://iopwiki.com/images/thumb/7/7f/MAC-10_S.png/128px-MAC-10_S.png"));
-//            add(new TopItem("FMG-9", "https://iopwiki.com/images/thumb/d/d8/FMG-9_S.png/128px-FMG-9_S.png"));
-//            add(new TopItem("Vector", "https://iopwiki.com/images/thumb/6/69/Vector_S.png/128px-Vector_S.png"));
+            add(new TopItem("FMG-9", "https://iopwiki.com/images/thumb/d/d8/FMG-9_S.png/128px-FMG-9_S.png"));
+            add(new TopItem("Vector", "https://iopwiki.com/images/thumb/6/69/Vector_S.png/128px-Vector_S.png"));
 //            add(new TopItem("PPSh-41", "https://iopwiki.com/images/thumb/3/31/PPSh-41_S.png/128px-PPSh-41_S.png"));
 //            add(new TopItem("PPS-43", "https://iopwiki.com/images/thumb/f/fb/PPS-43_S.png/128px-PPS-43_S.png"));
 //            add(new TopItem("PP-90", "https://iopwiki.com/images/thumb/1/1d/PP-90_S.png/128px-PP-90_S.png"));
@@ -139,12 +123,12 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("M38", "https://iopwiki.com/images/thumb/5/50/Beretta_Model_38_S.png/128px-Beretta_Model_38_S.png"));
             add(new TopItem("Micro Uzi", "https://iopwiki.com/images/thumb/7/71/Micro_Uzi_S.png/128px-Micro_Uzi_S.png"));
 //            add(new TopItem("m45", "https://iopwiki.com/images/thumb/8/8a/m45_S.png/128px-m45_S.png"));
-//            add(new TopItem("M1 Garand", "https://iopwiki.com/images/thumb/1/1d/M1_Garand_S.png/128px-M1_Garand_S.png"));
+            add(new TopItem("M1 Garand", "https://iopwiki.com/images/thumb/1/1d/M1_Garand_S.png/128px-M1_Garand_S.png"));
 //            add(new TopItem("M1A1", "https://iopwiki.com/images/thumb/9/9a/M1A1_S.png/128px-M1A1_S.png"));
             add(new TopItem("Springfield", "https://iopwiki.com/images/thumb/3/3d/Springfield_S.png/128px-Springfield_S.png"));
             add(new TopItem("M14", "https://iopwiki.com/images/thumb/7/76/M14_S.png/128px-M14_S.png"));
 //            add(new TopItem("M21", "https://iopwiki.com/images/thumb/d/da/M21_S.png/128px-M21_S.png"));
-//            add(new TopItem("Mosin-Nagant", "https://iopwiki.com/images/thumb/9/97/Mosin-Nagant_S.png/128px-Mosin-Nagant_S.png"));
+            add(new TopItem("Mosin-Nagant", "https://iopwiki.com/images/thumb/9/97/Mosin-Nagant_S.png/128px-Mosin-Nagant_S.png"));
 //            add(new TopItem("SVT-38", "https://iopwiki.com/images/thumb/2/26/SVT-38_S.png/128px-SVT-38_S.png"));
 //            add(new TopItem("SKS", "https://iopwiki.com/images/thumb/2/22/Simonov_S.png/128px-Simonov_S.png"));
 //            add(new TopItem("PTRD", "https://iopwiki.com/images/thumb/e/ed/PTRD_S.png/128px-PTRD_S.png"));
@@ -157,17 +141,17 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("FN49", "https://iopwiki.com/images/thumb/a/ac/FN-49_S.png/128px-FN-49_S.png"));
 //            add(new TopItem("VM59", "https://iopwiki.com/images/thumb/b/b3/BM59_S.png/128px-BM59_S.png"));
             add(new TopItem("NTW-20", "https://iopwiki.com/images/thumb/a/a0/NTW-20_S.png/128px-NTW-20_S.png"));
-//            add(new TopItem("M16A1", "https://iopwiki.com/images/thumb/7/7e/M16A1_S.png/128px-M16A1_S.png"));
-//            add(new TopItem("M4A1", "https://iopwiki.com/images/thumb/c/cb/M4A1_S.png/128px-M4A1_S.png"));
-//            add(new TopItem("M4 SOPMOD II", "https://iopwiki.com/images/thumb/f/f2/M4_SOPMOD_II_S.png/128px-M4_SOPMOD_II_S.png"));
-//            add(new TopItem("ST AR-15", "https://iopwiki.com/images/thumb/a/a2/ST_AR-15_S.png/128px-ST_AR-15_S.png"));
+            add(new TopItem("M16A1", "https://iopwiki.com/images/thumb/7/7e/M16A1_S.png/128px-M16A1_S.png"));
+            add(new TopItem("M4A1", "https://iopwiki.com/images/thumb/c/cb/M4A1_S.png/128px-M4A1_S.png"));
+            add(new TopItem("M4 SOPMOD II", "https://iopwiki.com/images/thumb/f/f2/M4_SOPMOD_II_S.png/128px-M4_SOPMOD_II_S.png"));
+            add(new TopItem("ST AR-15", "https://iopwiki.com/images/thumb/a/a2/ST_AR-15_S.png/128px-ST_AR-15_S.png"));
 //            add(new TopItem("AK-47", "https://iopwiki.com/images/thumb/2/22/AK-47_S.png/128px-AK-47_S.png"));
 //            add(new TopItem("AK-74U", "https://iopwiki.com/images/thumb/6/6f/AK-74U_S.png/128px-AK-74U_S.png"));
 //            add(new TopItem("AS Val", "https://iopwiki.com/images/thumb/1/1f/AS_Val_S.png/128px-AS_Val_S.png"));
 //            add(new TopItem("StG44", "https://iopwiki.com/images/thumb/b/bc/StG44_S.png/128px-StG44_S.png"));
 //            add(new TopItem("G41", "https://iopwiki.com/images/thumb/a/ab/G41_S.png/128px-G41_S.png"));
 //            add(new TopItem("G3", "https://iopwiki.com/images/thumb/7/78/G3_S.png/128px-G3_S.png"));
-//            add(new TopItem("G36", "https://iopwiki.com/images/thumb/7/7d/G36_S.png/128px-G36_S.png"));
+            add(new TopItem("G36", "https://iopwiki.com/images/thumb/7/7d/G36_S.png/128px-G36_S.png"));
             add(new TopItem("416", "https://iopwiki.com/images/thumb/8/8e/HK416_S.png/128px-HK416_S.png"));
 //            add(new TopItem("Type56-1", "https://iopwiki.com/images/thumb/e/e7/Type_56-1_S.png/128px-Type_56-1_S.png"));
 //            add(new TopItem("L85A1", "https://iopwiki.com/images/thumb/8/86/L85A1_S.png/128px-L85A1_S.png"));
@@ -180,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("M1918 BAR", "https://iopwiki.com/images/thumb/7/79/M1918_S.png/128px-M1918_S.png"));
 //            add(new TopItem("M2HB", "https://iopwiki.com/images/thumb/6/6a/M2HB_S.png/128px-M2HB_S.png"));
 //            add(new TopItem("M60", "https://iopwiki.com/images/thumb/4/4d/M60_S.png/128px-M60_S.png"));
-//            add(new TopItem("M249 SAW", "https://iopwiki.com/images/thumb/3/3a/M249_SAW_S.png/128px-M249_SAW_S.png"));
+            add(new TopItem("M249 SAW", "https://iopwiki.com/images/thumb/3/3a/M249_SAW_S.png/128px-M249_SAW_S.png"));
 //            add(new TopItem("M1919A4", "https://iopwiki.com/images/thumb/0/03/M1919A4_S.png/128px-M1919A4_S.png"));
 //            add(new TopItem("LWMMG", "https://iopwiki.com/images/thumb/7/75/LWMMG_S.png/128px-LWMMG_S.png"));
 //            add(new TopItem("DP28", "https://iopwiki.com/images/thumb/a/a2/DP28_S.png/128px-DP28_S.png"));
@@ -193,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("FNP9", "https://iopwiki.com/images/thumb/a/aa/FNP-9_S.png/128px-FNP-9_S.png"));
 //            add(new TopItem("MP-446", "https://iopwiki.com/images/thumb/c/c4/MP-446_S.png/128px-MP-446_S.png"));
 //            add(new TopItem("Spectre-M4", "https://iopwiki.com/images/thumb/a/a0/Spectre_M4_S.png/128px-Spectre_M4_S.png"));
-//            add(new TopItem("IDW", "https://iopwiki.com/images/thumb/b/bd/IDW_S.png/128px-IDW_S.png"));
+            add(new TopItem("IDW", "https://iopwiki.com/images/thumb/b/bd/IDW_S.png/128px-IDW_S.png"));
 //            add(new TopItem("Type64", "https://iopwiki.com/images/thumb/8/8d/Type_64_S.png/128px-Type_64_S.png"));
 //            add(new TopItem("Type88", "https://iopwiki.com/images/thumb/0/0b/Hanyang_Type_88_S.png/128px-Hanyang_Type_88_S.png"));
             add(new TopItem("Grizzly", "https://iopwiki.com/images/thumb/2/29/Grizzly_MkV_S.png/128px-Grizzly_MkV_S.png"));
@@ -205,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("UMP40", "https://iopwiki.com/images/thumb/f/f6/UMP40_S.png/128px-UMP40_S.png"));
             add(new TopItem("UMP45", "https://iopwiki.com/images/thumb/7/7b/UMP45_S.png/128px-UMP45_S.png"));
 //            add(new TopItem("G36C", "https://iopwiki.com/images/thumb/d/da/G36C_S.png/128px-G36C_S.png"));
-//            add(new TopItem("OTs-12", "https://iopwiki.com/images/thumb/9/97/OTs-12_S.png/128px-OTs-12_S.png"));
-//            add(new TopItem("FAL", "https://iopwiki.com/images/thumb/3/35/FAL_S.png/128px-FAL_S.png"));
+            add(new TopItem("OTs-12", "https://iopwiki.com/images/thumb/9/97/OTs-12_S.png/128px-OTs-12_S.png"));
+            add(new TopItem("FAL", "https://iopwiki.com/images/thumb/3/35/FAL_S.png/128px-FAL_S.png"));
 //            add(new TopItem("F2000", "https://iopwiki.com/images/thumb/f/fd/F2000_S.png/128px-F2000_S.png"));
 //            add(new TopItem("CZ-805", "https://iopwiki.com/images/thumb/7/7c/CZ-805_S.png/128px-CZ-805_S.png"));
 //            add(new TopItem("MG5", "https://iopwiki.com/images/thumb/0/0e/MG5_S.png/128px-MG5_S.png"));
@@ -248,31 +232,32 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("OTs-44", "https://iopwiki.com/images/thumb/b/bf/OTs-44_S.png/128px-OTs-44_S.png"));
 //            add(new TopItem("G28", "https://iopwiki.com/images/thumb/9/9c/G28_S.png/128px-G28_S.png"));
 //            add(new TopItem("SSG 69", "https://iopwiki.com/images/thumb/f/f5/SSG_69_S.png/128px-SSG_69_S.png"));
-//            add(new TopItem("IWS-2000", "https://iopwiki.com/images/thumb/2/22/IWS_2000_S.png/128px-IWS_2000_S.png"));
-//            add(new TopItem("AEK-999", "https://iopwiki.com/images/thumb/4/45/AEK-999_S.png/128px-AEK-999_S.png"));
+            add(new TopItem("IWS-2000", "https://iopwiki.com/images/thumb/2/22/IWS_2000_S.png/128px-IWS_2000_S.png"));
+            add(new TopItem("AEK-999", "https://iopwiki.com/images/thumb/4/45/AEK-999_S.png/128px-AEK-999_S.png"));
 //            add(new TopItem("Shipka", "https://iopwiki.com/images/thumb/5/54/Shipka_S.png/128px-Shipka_S.png"));
 //            add(new TopItem("M1887", "https://iopwiki.com/images/thumb/0/0c/M1887_S.png/128px-M1887_S.png"));
 //            add(new TopItem("M1897", "https://iopwiki.com/images/thumb/3/3f/M1897_S.png/128px-M1897_S.png"));
-//            add(new TopItem("Ithaca M37", "https://iopwiki.com/images/thumb/a/a9/M37_S.png/128px-M37_S.png"));
-//            add(new TopItem("M500", "https://iopwiki.com/images/thumb/3/30/M500_S.png/128px-M500_S.png"));
-//            add(new TopItem("M590", "https://iopwiki.com/images/thumb/1/1b/M590_S.png/128px-M590_S.png"));
-//            add(new TopItem("Super-Shorty", "https://iopwiki.com/images/thumb/3/31/Super-Shorty_S.png/128px-Super-Shorty_S.png"));
+            add(new TopItem("Ithaca M37", "https://iopwiki.com/images/thumb/a/a9/M37_S.png/128px-M37_S.png"));
+            add(new TopItem("M500", "https://iopwiki.com/images/thumb/3/30/M500_S.png/128px-M500_S.png"));
+            add(new TopItem("M590", "https://iopwiki.com/images/thumb/1/1b/M590_S.png/128px-M590_S.png"));
+            add(new TopItem("M870", "https://iopwiki.com/images/3/3d/M870_S.png"));
+            add(new TopItem("Super-Shorty", "https://iopwiki.com/images/thumb/3/31/Super-Shorty_S.png/128px-Super-Shorty_S.png"));
 //            add(new TopItem("KSG", "https://iopwiki.com/images/thumb/4/41/KSG_S.png/128px-KSG_S.png"));
 //            add(new TopItem("KS-23", "https://iopwiki.com/images/thumb/0/09/KS-23_S.png/128px-KS-23_S.png"));
 //            add(new TopItem("RMB-93", "https://iopwiki.com/images/thumb/9/9a/RMB-93_S.png/128px-RMB-93_S.png"));
-//            add(new TopItem("Saiga-12", "https://iopwiki.com/images/thumb/9/99/Saiga-12_S.png/128px-Saiga-12_S.png"));
+            add(new TopItem("Saiga-12", "https://iopwiki.com/images/thumb/9/99/Saiga-12_S.png/128px-Saiga-12_S.png"));
 //            add(new TopItem("Type 97 Shotgun", "https://iopwiki.com/images/thumb/2/20/Type_97_Shotgun_S.png/128px-Type_97_Shotgun_S.png"));
-//            add(new TopItem("SPAS-12", "https://iopwiki.com/images/thumb/c/ca/SPAS-12_S.png/128px-SPAS-12_S.png"));
-//            add(new TopItem("AA-12", "https://iopwiki.com/images/thumb/d/d9/AA-12_S.png/128px-AA-12_S.png"));
+            add(new TopItem("SPAS-12", "https://iopwiki.com/images/thumb/c/ca/SPAS-12_S.png/128px-SPAS-12_S.png"));
+            add(new TopItem("AA-12", "https://iopwiki.com/images/thumb/d/d9/AA-12_S.png/128px-AA-12_S.png"));
 //            add(new TopItem("FP-6", "https://iopwiki.com/images/thumb/a/a8/FP-6_S.png/128px-FP-6_S.png"));
 //            add(new TopItem("M1014", "https://iopwiki.com/images/thumb/b/b5/M1014_S.png/128px-M1014_S.png"));
 //            add(new TopItem("CZ75", "https://iopwiki.com/images/thumb/a/a9/CZ75_S.png/128px-CZ75_S.png"));
 //            add(new TopItem("Gr HK45", "https://iopwiki.com/images/thumb/7/7e/HK45_S.png/128px-HK45_S.png"));
 //            add(new TopItem("Spitfire", "https://iopwiki.com/images/thumb/2/20/Spitfire_S.png/128px-Spitfire_S.png"));
-//            add(new TopItem("SCW", "https://iopwiki.com/images/thumb/b/bc/SCW_S.png/128px-SCW_S.png"));
+            add(new TopItem("SCW", "https://iopwiki.com/images/thumb/b/bc/SCW_S.png/128px-SCW_S.png"));
 //            add(new TopItem("ASh-12.7", "https://iopwiki.com/images/thumb/5/5a/ASh-12.7_S.png/128px-ASh-12.7_S.png"));
 //            add(new TopItem("Ribeyrolles", "https://iopwiki.com/images/thumb/b/b5/Ribeyrolles_S.png/128px-Ribeyrolles_S.png"));
-//            add(new TopItem("RFB", "https://iopwiki.com/images/thumb/e/e9/RFB_S.png/128px-RFB_S.png"));
+            add(new TopItem("RFB", "https://iopwiki.com/images/thumb/e/e9/RFB_S.png/128px-RFB_S.png"));
 //            add(new TopItem("PKP", "https://iopwiki.com/images/thumb/5/5c/PKP_S.png/128px-PKP_S.png"));
 //            add(new TopItem("Type81R", "https://iopwiki.com/images/thumb/0/03/Type_81_Carbine_S.png/128px-Type_81_Carbine_S.png"));
 //            add(new TopItem("ART556", "https://iopwiki.com/images/thumb/6/68/ART556_S.png/128px-ART556_S.png"));
@@ -283,18 +268,18 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("PzB39", "https://iopwiki.com/images/thumb/9/9b/PzB_39_S.png/128px-PzB_39_S.png"));
 //            add(new TopItem("T91", "https://iopwiki.com/images/thumb/3/35/T91_S.png/128px-T91_S.png"));
 //            add(new TopItem("wz.29", "https://iopwiki.com/images/thumb/2/26/wz.29_S.png/128px-wz.29_S.png"));
-//            add(new TopItem("Contender", "https://iopwiki.com/images/thumb/2/28/Contender_S.png/128px-Contender_S.png"));
-//            add(new TopItem("T-5000", "https://iopwiki.com/images/thumb/8/87/T-5000_S.png/128px-T-5000_S.png"));
+            add(new TopItem("Contender", "https://iopwiki.com/images/thumb/2/28/Contender_S.png/128px-Contender_S.png"));
+            add(new TopItem("T-5000", "https://iopwiki.com/images/thumb/8/87/T-5000_S.png/128px-T-5000_S.png"));
 //            add(new TopItem("Ameli", "https://iopwiki.com/images/thumb/9/99/Ameli_S.png/128px-Ameli_S.png"));
 //            add(new TopItem("P226", "https://iopwiki.com/images/thumb/b/bb/P226_S.png/128px-P226_S.png"));
 //            add(new TopItem("AK5", "https://iopwiki.com/images/thumb/0/06/Ak_5_S.png/128px-Ak_5_S.png"));
-//            add(new TopItem("S.A.T.8", "https://iopwiki.com/images/thumb/e/e2/S.A.T.8_S.png/128px-S.A.T.8_S.png"));
-//            add(new TopItem("USAS-12", "https://iopwiki.com/images/thumb/4/49/USAS-12_S.png/128px-USAS-12_S.png"));
+            add(new TopItem("S.A.T.8", "https://iopwiki.com/images/thumb/e/e2/S.A.T.8_S.png/128px-S.A.T.8_S.png"));
+            add(new TopItem("USAS-12", "https://iopwiki.com/images/thumb/4/49/USAS-12_S.png/128px-USAS-12_S.png"));
 //            add(new TopItem("NS2000", "https://iopwiki.com/images/thumb/5/55/NS2000_S.png/128px-NS2000_S.png"));
 //            add(new TopItem("M12", "https://iopwiki.com/images/thumb/4/41/M12_S.png/128px-M12_S.png"));
 //            add(new TopItem("JS05", "https://iopwiki.com/images/thumb/4/40/JS05_S.png/128px-JS05_S.png"));
 //            add(new TopItem("T65", "https://iopwiki.com/images/thumb/a/a8/T65_S.png/128px-T65_S.png"));
-//            add(new TopItem("K2", "https://iopwiki.com/images/thumb/b/b7/K2_S.png/128px-K2_S.png"));
+            add(new TopItem("K2", "https://iopwiki.com/images/thumb/b/b7/K2_S.png/128px-K2_S.png"));
 //            add(new TopItem("MG23", "https://iopwiki.com/images/thumb/5/5a/HK23_S.png/128px-HK23_S.png"));
 //            add(new TopItem("Zas M21", "https://iopwiki.com/images/thumb/d/db/Zas_M21_S.png/128px-Zas_M21_S.png"));
 //            add(new TopItem("Carcano M1891", "https://iopwiki.com/images/thumb/c/ce/Carcano_M1891_S.png/128px-Carcano_M1891_S.png"));
@@ -305,21 +290,21 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("Thunder", "https://iopwiki.com/images/thumb/8/86/Thunder_S.png/128px-Thunder_S.png"));
 //            add(new TopItem("Honey Badger", "https://iopwiki.com/images/thumb/d/d8/Honey_Badger_S.png/128px-Honey_Badger_S.png"));
 //            add(new TopItem("Ballista", "https://iopwiki.com/images/thumb/1/14/Ballista_S.png/128px-Ballista_S.png"));
-//            add(new TopItem("AN-94", "https://iopwiki.com/images/thumb/3/3b/AN-94_S.png/128px-AN-94_S.png"));
-//            add(new TopItem("AK12", "https://iopwiki.com/images/thumb/c/c2/AK-12_S.png/128px-AK-12_S.png"));
+            add(new TopItem("AN-94", "https://iopwiki.com/images/thumb/3/3b/AN-94_S.png/128px-AN-94_S.png"));
+            add(new TopItem("AK12", "https://iopwiki.com/images/thumb/c/c2/AK-12_S.png/128px-AK-12_S.png"));
 //            add(new TopItem("CZ2000", "https://iopwiki.com/images/thumb/0/01/CZ2000_S.png/128px-CZ2000_S.png"));
 //            add(new TopItem("HMG21", "https://iopwiki.com/images/thumb/6/6f/HK21_S.png/128px-HK21_S.png"));
 //            add(new TopItem("OTs-39", "https://iopwiki.com/images/thumb/7/73/OTs-39_S.png/128px-OTs-39_S.png"));
 //            add(new TopItem("CZ-52", "https://iopwiki.com/images/thumb/5/5c/CZ52_S.png/128px-CZ52_S.png"));
 //            add(new TopItem("SRS", "https://iopwiki.com/images/thumb/0/08/SRS_S.png/128px-SRS_S.png"));
-//            add(new TopItem("K5", "https://iopwiki.com/images/thumb/8/8f/K5_S.png/128px-K5_S.png"));
+            add(new TopItem("K5", "https://iopwiki.com/images/thumb/8/8f/K5_S.png/128px-K5_S.png"));
 //            add(new TopItem("C-MS", "https://iopwiki.com/images/thumb/7/70/C-MS_S.png/128px-C-MS_S.png"));
-//            add(new TopItem("MDR", "https://iopwiki.com/images/thumb/f/f5/MDR_S.png/128px-MDR_S.png"));
+            add(new TopItem("MDR", "https://iopwiki.com/images/thumb/f/f5/MDR_S.png/128px-MDR_S.png"));
 //            add(new TopItem("XM8", "https://iopwiki.com/images/thumb/a/ae/XM8_S.png/128px-XM8_S.png"));
 //            add(new TopItem("T77", "https://iopwiki.com/images/thumb/f/f2/T77_S.png/128px-T77_S.png"));
 //            add(new TopItem("Mk 12", "https://iopwiki.com/images/thumb/7/7c/43M_S.png/128px-43M_S.png"));
 //            add(new TopItem("A-91", "https://iopwiki.com/images/thumb/a/ac/MP-443_S.png/128px-MP-443_S.png"));
-//            add(new TopItem("GSh-18", "https://iopwiki.com/images/thumb/5/5d/GSh-18_S.png/128px-GSh-18_S.png"));
+            add(new TopItem("GSh-18", "https://iopwiki.com/images/thumb/5/5d/GSh-18_S.png/128px-GSh-18_S.png"));
 //            add(new TopItem("M870", "https://iopwiki.com/images/thumb/e/e5/TAC-50_S.png/128px-TAC-50_S.png"));
 //            add(new TopItem("Model L", "https://iopwiki.com/images/thumb/0/06/Model_L_S.png/128px-Model_L_S.png"));
 //            add(new TopItem("M82A1", "https://iopwiki.com/images/thumb/a/a6/PM-06_S.png/128px-PM-06_S.png"));
@@ -333,9 +318,9 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("SAR-21", "https://iopwiki.com/images/thumb/9/9e/SAR-21_S.png/128px-SAR-21_S.png"));
 //            add(new TopItem("QJY-88", "https://iopwiki.com/images/thumb/e/ee/Type_88_S.png/128px-Type_88_S.png"));
 //            add(new TopItem("64 Shiki", "https://iopwiki.com/images/thumb/5/5a/Howa_Type_64_S.png/128px-Howa_Type_64_S.png"));
-//            add(new TopItem("P90", "https://iopwiki.com/images/thumb/3/33/P90_S.png/128px-P90_S.png"));
+            add(new TopItem("P90", "https://iopwiki.com/images/thumb/3/33/P90_S.png/128px-P90_S.png"));
 //            add(new TopItem("K31", "https://iopwiki.com/images/thumb/3/3b/K31_S.png/128px-K31_S.png"));
-//            add(new TopItem("Jericho", "https://iopwiki.com/images/thumb/9/97/Jericho_S.png/128px-Jericho_S.png"));
+            add(new TopItem("Jericho", "https://iopwiki.com/images/thumb/9/97/Jericho_S.png/128px-Jericho_S.png"));
 //            add(new TopItem("62 Shiki", "https://iopwiki.com/images/thumb/c/cb/Type_62_S.png/128px-Type_62_S.png"));
 //            add(new TopItem("Falcon", "https://iopwiki.com/images/thumb/4/4e/Falcon_S.png/128px-Falcon_S.png"));
 //            add(new TopItem("M200", "https://iopwiki.com/images/thumb/6/65/M200_S.png/128px-M200_S.png"));
@@ -343,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("X95", "https://iopwiki.com/images/thumb/e/e8/Desert_Eagle_S.png/128px-Desert_Eagle_S.png"));
 //            add(new TopItem("KSVK", "https://iopwiki.com/images/thumb/5/52/SSG_3000_S.png/128px-SSG_3000_S.png"));
 //            add(new TopItem("Lewis Gun", "https://iopwiki.com/images/thumb/0/0c/ACR_S.png/128px-ACR_S.png"));
-//            add(new TopItem("UKM-2000", "https://iopwiki.com/images/thumb/3/32/M1895_CB_S.png/128px-M1895_CB_S.png"));
+            add(new TopItem("UKM-2000", "https://iopwiki.com/images/thumb/3/32/M1895_CB_S.png/128px-M1895_CB_S.png"));
 //            add(new TopItem("HS2000", "https://iopwiki.com/images/thumb/5/53/Kord_S.png/128px-Kord_S.png"));
 //            add(new TopItem("Steyr Scout", "https://iopwiki.com/images/thumb/f/ff/VP70_S.png/128px-VP70_S.png"));
 //            add(new TopItem("Magal", "https://iopwiki.com/images/thumb/c/c7/MAT-49_S.png/128px-MAT-49_S.png"));
@@ -356,8 +341,8 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("R93", "https://iopwiki.com/images/thumb/0/0a/CR-21_S.png/128px-CR-21_S.png"));
 //            add(new TopItem("R5", "https://iopwiki.com/images/thumb/e/e6/R5_S.png/128px-R5_S.png"));
 //            add(new TopItem("Howa 89", "https://iopwiki.com/images/thumb/7/7b/Howa_Type_89_S.png/128px-Howa_Type_89_S.png"));
-//            add(new TopItem("RPK-16", "https://iopwiki.com/images/thumb/7/7c/43M_S.png/128px-43M_S.png"));
-//            add(new TopItem("AK-15", "https://iopwiki.com/images/thumb/1/13/AK-15_S.png/128px-AK-15_S.png"));
+            add(new TopItem("RPK-16", "https://iopwiki.com/images/thumb/7/7c/43M_S.png/128px-43M_S.png"));
+            add(new TopItem("AK-15", "https://iopwiki.com/images/thumb/1/13/AK-15_S.png/128px-AK-15_S.png"));
 //            add(new TopItem("Webley", "https://iopwiki.com/images/thumb/3/35/Webley_S.png/128px-Webley_S.png"));
 //            add(new TopItem("CF05", "https://iopwiki.com/images/thumb/e/e9/CF05_S.png/128px-CF05_S.png"));
 //            add(new TopItem("SL8", "https://iopwiki.com/images/thumb/0/08/SL8_S.png/128px-SL8_S.png"));
@@ -376,8 +361,8 @@ public class MainActivity extends AppCompatActivity {
 //            add(new TopItem("TS12", "https://iopwiki.com/images/thumb/7/72/TS12_S.png/128px-TS12_S.png"));
 //            add(new TopItem("Noel Vermillion", "https://iopwiki.com/images/thumb/9/9c/Noel_S.png/128px-Noel_S.png"));
 //            add(new TopItem("Elphelt", "https://iopwiki.com/images/thumb/a/a8/Elphelt_S.png/128px-Elphelt_S.png"));
-//            add(new TopItem("El Clear", "https://iopwiki.com/images/thumb/a/a1/Clear_S.png/128px-Clear_S.png"));
-//            add(new TopItem("El Fail", "https://iopwiki.com/images/thumb/b/be/Fail_S.png/128px-Fail_S.png"));
+            add(new TopItem("El Clear", "https://iopwiki.com/images/thumb/a/a1/Clear_S.png/128px-Clear_S.png"));
+            add(new TopItem("El Fail", "https://iopwiki.com/images/thumb/b/be/Fail_S.png/128px-Fail_S.png"));
 //            add(new TopItem("Jill Stingray", "https://iopwiki.com/images/thumb/0/00/Jill_S.png/128px-Jill_S.png"));
 //            add(new TopItem("Sei Asagiri", "https://iopwiki.com/images/thumb/9/96/Sei_S.png/128px-Sei_S.png"));
 //            add(new TopItem("Dorothy Haze", "https://iopwiki.com/images/thumb/3/32/Dorothy_S.png/128px-Dorothy_S.png"));
