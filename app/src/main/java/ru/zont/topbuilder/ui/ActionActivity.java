@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ru.zont.topbuilder.R;
+import ru.zont.topbuilder.core.EloTopBuilder;
 import ru.zont.topbuilder.core.TopBuilder;
-import ru.zont.topbuilder.core.WeightTop;
+import ru.zont.topbuilder.core.WeightTopBuilder;
 import ru.zont.topbuilder.ui.data.TopItem;
 import ru.zont.topbuilder.ui.data.TopList;
 
@@ -38,11 +43,11 @@ public class ActionActivity extends AppCompatActivity {
             activeFragment = (ActionFragment) getSupportFragmentManager().findFragmentByTag("action");
         }
 
-        setupAction(tempList());
+        setupAction(tempList2());
     }
 
     private void setupAction(TopList list) {
-        topInstance = new WeightTop<>(list);
+        topInstance = new EloTopBuilder<>(list);
         nextPair();
     }
 
@@ -107,6 +112,27 @@ public class ActionActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private TopList tempList2() {
+        return new TopList() {{
+            add(new TopItem("Mavor", "https://static.wikia.nocookie.net/supcom/images/a/a5/UEB2401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316195204"));
+            add(new TopItem("Novax", "https://static.wikia.nocookie.net/supcom/images/b/b6/XEB2402_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080602103428"));
+            add(new TopItem("Atlantis", "https://static.wikia.nocookie.net/supcom/images/8/8f/UES0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316203059"));
+            add(new TopItem("Fatboy", "https://static.wikia.nocookie.net/supcom/images/e/e5/UEL0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20090302225042"));
+            add(new TopItem("Paragon", "https://static.wikia.nocookie.net/supcom/images/c/c9/XAB1401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080602101715"));
+            add(new TopItem("Salvation", "https://static.wikia.nocookie.net/supcom/images/1/19/XAB2307_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080602103539"));
+            add(new TopItem("Galactic Colossus", "https://static.wikia.nocookie.net/supcom/images/9/93/UAL0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316192045"));
+            add(new TopItem("Tempest", "https://static.wikia.nocookie.net/supcom/images/4/4e/UAS0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080505023613"));
+            add(new TopItem("CZAR", "https://static.wikia.nocookie.net/supcom/images/4/47/UAA0310_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316030643"));
+            add(new TopItem("Monkeylord", "https://static.wikia.nocookie.net/supcom/images/6/6d/URL0402_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316211951"));
+            add(new TopItem("Megalith", "https://static.wikia.nocookie.net/supcom/images/3/36/XRL0403_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080602111012"));
+            add(new TopItem("Soul Ripper", "https://static.wikia.nocookie.net/supcom/images/0/00/URA0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316203745"));
+            add(new TopItem("Schathis", "https://static.wikia.nocookie.net/supcom/images/3/3e/URL0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20070316211920"));
+            add(new TopItem("Ythotha", "https://static.wikia.nocookie.net/supcom/images/5/5c/XSL0401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080515015541"));
+            add(new TopItem("Yolona Oss", "https://static.wikia.nocookie.net/supcom/images/a/a4/XSB2401_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080515015242"));
+            add(new TopItem("Ahwassa", "https://static.wikia.nocookie.net/supcom/images/9/99/XSA0402_build_btn.png/revision/latest/scale-to-width-down/64?cb=20080515015025"));
+        }};
     }
 
     private TopList tempList() {

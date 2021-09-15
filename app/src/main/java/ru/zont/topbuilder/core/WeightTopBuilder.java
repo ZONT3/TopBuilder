@@ -7,14 +7,14 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 
-public class WeightTop<T> extends BasicTopBuilder<T> {
+public class WeightTopBuilder<T> extends BasicTopBuilder<T> {
     private final ArrayList<Entry> list;
 
     private Entry currLhs;
     private Entry currRhs;
     private boolean validation = false;
 
-    public WeightTop(List<T> list) {
+    public WeightTopBuilder(List<T> list) {
         this.list = wrap(list);
     }
 
