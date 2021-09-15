@@ -2,4 +2,7 @@
     <string name="app_name">TopBuilder</string>
     <string name="action_rhs">Right hand side</string>
     <string name="action_lhs">Left hand side</string>
+    <string name="info_elo">Elo Rating</string>
+    <string name="info_elo_desc">Top built on Elo rating system. User need to compare each other element. Better accuracy, than Weight method, but constantly need large amount of decisions.</string>
+    <string name="info_weight">Weight-based</string>
 </resources>
