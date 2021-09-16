@@ -1,6 +1,9 @@
-package ru.zont.topbuilder.core;
+package ru.zont.topbuilder.core.implement;
 
 import java.util.*;
+
+import ru.zont.topbuilder.core.TopResult;
+import ru.zont.topbuilder.core.TrackableProgress;
 
 public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackableProgress {
 
@@ -137,7 +140,5 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
             left = t;
             right = d;
         }
-
     }
-
 }

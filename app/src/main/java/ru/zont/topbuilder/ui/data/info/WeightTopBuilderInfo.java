@@ -3,7 +3,7 @@ package ru.zont.topbuilder.ui.data.info;
 import android.content.Context;
 
 import ru.zont.topbuilder.R;
-import ru.zont.topbuilder.core.WeightTopBuilder;
+import ru.zont.topbuilder.core.implement.WeightTopBuilder;
 import ru.zont.topbuilder.ui.data.TopBuilderInfo;
 import ru.zont.topbuilder.ui.data.TopItem;
 import ru.zont.topbuilder.ui.data.TopList;

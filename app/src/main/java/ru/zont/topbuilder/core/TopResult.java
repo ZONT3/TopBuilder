@@ -11,7 +11,7 @@ public class TopResult<T> {
     private final HashMap<Integer, ArrayList<T>> map = new HashMap<>();
 
     @SuppressWarnings("UnusedReturnValue")
-    ArrayList<T> put(Integer key, T value) {
+    public ArrayList<T> put(Integer key, T value) {
         final ArrayList<T> ts = map.get(key);
         final ArrayList<T> list = ts != null ? ts : new ArrayList<>(2);
         list.add(value);

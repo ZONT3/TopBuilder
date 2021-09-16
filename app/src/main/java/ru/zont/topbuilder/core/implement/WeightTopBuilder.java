@@ -1,4 +1,4 @@
-package ru.zont.topbuilder.core;
+package ru.zont.topbuilder.core.implement;
 
 import androidx.annotation.NonNull;
 
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
+
+import ru.zont.topbuilder.core.TopResult;
+import ru.zont.topbuilder.core.TrackableProgress;
 
 public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements TrackableProgress {
     private final ArrayList<Entry> list;

@@ -7,35 +7,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class TopBuilderTest extends TestCase { // TODO recreate test for new API
-//    public void testSort() {
-//        ArrayList<Integer> integers = new ArrayList<>(15);
-//        for (int i = 14; i >= 0; i--) integers.add(i);
-//        testReturning(integers, (lhs, rhs) -> rhs - lhs);
-//    }
-//
-//    public void testSortByOne() {
-//        ArrayList<Integer> integers = new ArrayList<>(15);
-//        for (int i = 14; i >= 0; i--) integers.add(i);
-//        testReturning(integers, (lhs, rhs) -> (int) Math.signum(rhs - lhs));
-//    }
-//
-//    public void testSortWithDuplicates() {
-//        ArrayList<Integer> integers = new ArrayList<>(15);
-//        for (int i = 14; i >= 0; i--) integers.add(i - (i % 2));
-//        testReturning(integers, (lhs, rhs) -> (int) Math.signum(rhs - lhs));
-//    }
-//
-//    private void testReturning(ArrayList<Integer> integers, TopBuilder.Supplier<Integer> supplier) {
-//        ArrayList<Integer> rand = new ArrayList<>(integers);
-//        Collections.shuffle(rand, new Random(123));
-//
-//        WeightTop<Integer> top = new WeightTop<>(rand);
-//        while (top.hasNext()) {
-//            top.next(supplier);
-//        }
-//
-//        List<Integer> results = top.getResults();
-//        assertEquals(integers, results);
-//    }
+public class TopBuilderTest extends TestCase {
+
+    // TODO move EloTop to BackTrackable base, test it
+
+    public void testStrGen() {
+        final Random r = new Random(123);
+        final String str = Tools.genNewStr(r);
+        assertTrue(str.matches("[a-z]{6,16}"));
+    }
+
+    public void testStrGenStress() {
+        final Random r = new Random(System.currentTimeMillis());
+        String str;
+        for (int i = 0; i < 10000; i++) {
+            str = Tools.genNewStr(r);
+            assertTrue("Invalid: " + str, str.matches("[a-z]{6,16}"));
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package ru.zont.topbuilder.core;
 
+import java.util.List;
+
 public interface TopBuilder<T> {
 
     /**
@@ -53,6 +55,8 @@ public interface TopBuilder<T> {
      * @return Список с результатами
      */
     TopResult<T> getResults();
+
+    List<DecisionEntry<T>> getHistory();
 
     interface Supplier<T> {
         void provide(T lhs, T rhs);
