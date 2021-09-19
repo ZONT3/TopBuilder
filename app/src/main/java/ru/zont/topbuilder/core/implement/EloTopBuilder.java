@@ -87,10 +87,10 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
     @SuppressWarnings("ConstantConditions")
     @Override
     public TopResult<T> getResults() {
-        ArrayList<T> list = new ArrayList<T>(ratingMap.size());
+        ArrayList<T> list = new ArrayList<>(ratingMap.size());
         list.addAll(ratingMap.keySet());
         Collections.sort(list, (o1, o2) -> ratingMap.get(o2) - ratingMap.get(o1));
-        TopResult<T> topResult = new TopResult<T>();
+        TopResult<T> topResult = new TopResult<>();
         for (int i = 0; i < list.size(); i++)
             topResult.put(i + 1, list.get(i));
 
