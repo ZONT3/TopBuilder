@@ -7,4 +7,5 @@
     <string name="info_weight">Weight-based</string>
     <string name="action_progress_weight">%d / ?? (actual) / %d (max)</string>
     <string name="action_progress">%d / %d</string>
+    <string name="info_koth">King of the Hill</string>
 </resources>

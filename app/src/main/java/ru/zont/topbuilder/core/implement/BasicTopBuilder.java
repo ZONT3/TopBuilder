@@ -24,6 +24,8 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
 
     private final ArrayDeque<Runnable> undoStack = new ArrayDeque<>();
 
+    private BiConsumer<Integer, Integer> progressListener;
+
     @Override
     public void undo() {
         final Runnable todo = undoStack.pollLast();
@@ -122,6 +124,15 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
     private List<DecisionEntry<T>> cutHistory(int indexFromEnd) {
         final int size = history.size();
         return new ArrayList<>(history.subList(size - indexFromEnd + 1, size));
+    }
+
+    protected void acceptProgress(int curr, int max) {
+        if (progressListener != null)
+            progressListener.accept(curr, max);
+    }
+
+    public void setProgressListener(BiConsumer<Integer, Integer> consumer) {
+        progressListener = consumer;
     }
 
     // TODO extract code for next() - provideDecision(int) routine

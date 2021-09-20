@@ -87,6 +87,9 @@ public class ActionActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.action_container, fragment, FRAGMENT_TAG)
                 .commit();
+        final ActionBar ab = getSupportActionBar();
+        if (ab != null)
+            ab.setSubtitle(null);
     }
 
     private void onProgressChange(int i, int total) {

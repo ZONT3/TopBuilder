@@ -19,7 +19,6 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
 
     private final int decisionTotal;
     private int checked = 0;
-    private BiConsumer<Integer, Integer> progressListener;
 
     public WeightTopBuilder(List<T> list) {
         this.list = wrap(list);
@@ -32,6 +31,7 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
     public void next(Supplier<T> supplier) {
         if (!hasNext()) return;
         supplier.provide(currLhs.value, currRhs.value);
+        acceptProgress(checked + 1, decisionTotal);
     }
 
     @Override
@@ -50,8 +50,6 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
         applyTo.weight += abs;
 
         checked++;
-        if (progressListener != null)
-            progressListener.accept(checked, decisionTotal);
 
         validation = false;
 
@@ -64,8 +62,6 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
             validation = true;
 
             checked--;
-            if (progressListener != null)
-                progressListener.accept(checked, decisionTotal);
         });
     }
 
@@ -125,12 +121,6 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
         ArrayList<Entry> res = new ArrayList<>();
         for (T t : list) res.add(new Entry(t));
         return res;
-    }
-
-    @Override
-    public void setProgressListener(BiConsumer<Integer, Integer> consumer) {
-        progressListener = consumer;
-        progressListener.accept(checked, decisionTotal);
     }
 
     private class Entry {

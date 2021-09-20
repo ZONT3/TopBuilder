@@ -15,6 +15,7 @@ import ru.zont.topbuilder.ui.data.TopBuilderInfo;
 import ru.zont.topbuilder.ui.data.TopItem;
 import ru.zont.topbuilder.ui.data.TopList;
 import ru.zont.topbuilder.ui.data.info.EloTopBuilderInfo;
+import ru.zont.topbuilder.ui.data.info.KothTopBuilderInfo;
 import ru.zont.topbuilder.ui.data.info.WeightTopBuilderInfo;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.btW.setOnClickListener(v -> onClickButton(new WeightTopBuilderInfo()));
         binding.btE.setOnClickListener(v -> onClickButton(new EloTopBuilderInfo()));
+        binding.btKoth.setOnClickListener(v -> onClickButton(new KothTopBuilderInfo()));
     }
 
     private <T extends TopBuilder<? extends TopItem>> void onClickButton(TopBuilderInfo<T> info) {

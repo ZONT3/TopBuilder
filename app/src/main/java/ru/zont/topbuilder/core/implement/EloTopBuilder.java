@@ -12,7 +12,6 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
 
     private final int decisionTotal;
     private int checked = 0;
-    private BiConsumer<Integer, Integer> progressListener;
 
     private Pair<T, T> currPair;
 
@@ -38,6 +37,7 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
     public void next(Supplier<T> supplier) {
         if (!hasNext()) return;
         supplier.provide(currPair.left, currPair.right);
+        acceptProgress(checked + 1, decisionTotal);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -63,8 +63,6 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
 
         this.currPair.isCheck = true;
         checked++;
-        if (progressListener != null)
-            progressListener.accept(checked, decisionTotal);
 
         final Pair<T, T> finalPair = this.currPair;
         addUndoAction(() -> {
@@ -73,8 +71,6 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
             finalPair.isCheck = false;
 
             checked--;
-            if (progressListener != null)
-                progressListener.accept(checked, decisionTotal);
         });
     }
 
@@ -123,12 +119,6 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
 
     public IdentityHashMap<T, Integer> getRatingMap() {
         return ratingMap;
-    }
-
-    @Override
-    public void setProgressListener(BiConsumer<Integer, Integer> consumer) {
-        progressListener = consumer;
-        progressListener.accept(checked, decisionTotal);
     }
 
     private static class Pair<T, D> {
