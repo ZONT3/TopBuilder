@@ -28,6 +28,8 @@ public class TopItemHolder extends ArrayList<TopItem> {
             b.topItemTitle.setText(item.getTitle());
             Picasso.with(b.topItemThumb.getContext())
                     .load(item.getImage())
+                    .placeholder(android.R.drawable.stat_notify_sync)
+                    .error(android.R.drawable.ic_dialog_alert)
                     .into(b.topItemThumb);
             list.add(b);
         }

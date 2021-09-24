@@ -58,13 +58,25 @@ public class EloTopBuilder<T> extends BasicTopBuilder<T> implements TrackablePro
         final double deltaA = aK * ((decision < 0 ? 1 : decision > 0 ? 0 : 0.5) - aExpect);
         final double deltaB = bK * ((decision > 0 ? 1 : decision < 0 ? 0 : 0.5) - bExpect);
 
-        ratingMap.put(currPair.left, (int) (aRat + deltaA));
-        ratingMap.put(currPair.right, (int) (bRat + deltaB));
+        final double nRatingA = aRat + deltaA;
+        final double nRatingB = bRat + deltaB;
+        ratingMap.put(currPair.left, (int) nRatingA);
+        ratingMap.put(currPair.right, (int) nRatingB);
 
         this.currPair.isCheck = true;
         checked++;
 
         final Pair<T, T> finalPair = this.currPair;
+        addHistoryEntry(new RatingDecisionEntry<>(
+                finalPair.left,
+                finalPair.right,
+                decision,
+                (float) deltaA,
+                (float) deltaB,
+                (float) nRatingA,
+                (float) nRatingB
+        ));
+
         addUndoAction(() -> {
             ratingMap.put(finalPair.left, aRat);
             ratingMap.put(finalPair.right, bRat);

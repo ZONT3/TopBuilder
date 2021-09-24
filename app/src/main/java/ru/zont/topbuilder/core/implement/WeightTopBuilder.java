@@ -53,6 +53,16 @@ public class WeightTopBuilder<T> extends BasicTopBuilder<T> implements Trackable
 
         validation = false;
 
+        addHistoryEntry(new RatingDecisionEntry<>(
+                mCurrLhs.value,
+                mCurrRhs.value,
+                weight,
+                weight >= 0 ? 0 : abs,
+                weight <= 0 ? 0 : abs,
+                mCurrLhs.weight,
+                mCurrRhs.weight
+        ));
+
         addUndoAction(() -> {
             mCurrRhs.cancelRelation(mCurrLhs);
             mCurrLhs.cancelRelation(mCurrRhs);

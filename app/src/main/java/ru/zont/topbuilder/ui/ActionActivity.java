@@ -1,11 +1,16 @@
 package ru.zont.topbuilder.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,6 +26,7 @@ import ru.zont.topbuilder.ui.data.TopList;
 public class ActionActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TAG = "action";
+    public static final String HISTORY_TAG = "history";
 
     private final AtomicBoolean decisionUnlocked = new AtomicBoolean(false);
     private boolean firstPair = true;
@@ -137,11 +143,32 @@ public class ActionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (topInstance.hasNext()) {
+        final Fragment f = getSupportFragmentManager().findFragmentByTag(HISTORY_TAG);
+        if (f == null && topInstance.hasNext()) {
             topInstance.undo();
             nextPair();
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_action, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.act_menuitem_history) {
+            final HistoryFragment fragment = new HistoryFragment(topInstance);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.action_container, fragment, HISTORY_TAG)
+                    .addToBackStack(null)
+                    .commit();
+        } else return super.onOptionsItemSelected(item);
+        return true;
     }
 }

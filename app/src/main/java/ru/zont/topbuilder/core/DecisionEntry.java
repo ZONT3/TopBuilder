@@ -6,7 +6,7 @@ public class DecisionEntry<T> {
     private final T lhs;
     private final T rhs;
     private final int decision;
-    private final HashMap<String, Object> data;
+    protected final HashMap<String, Object> data;
 
     public DecisionEntry(T lhs, T rhs, int decision) {
         this(lhs, rhs, decision, new HashMap<>());

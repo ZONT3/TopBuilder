@@ -12,21 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.zont.topbuilder.R;
+import ru.zont.topbuilder.core.TopBuilder;
 import ru.zont.topbuilder.core.TopResult;
 import ru.zont.topbuilder.ui.data.TopItem;
 
-public class ResultsFragment extends Fragment {
-    private TopResult<TopItem> result;
+public class HistoryFragment extends Fragment {
 
-    public ResultsFragment() { }
+    private TopBuilder<TopItem> topBuilder;
 
-    public ResultsFragment(TopResult<TopItem> result) {
-        this.result = result;
-    }
+    public HistoryFragment() { }
 
-    @SuppressWarnings("unused")
-    public static ResultsFragment newInstance(TopResult<TopItem> result) {
-        return new ResultsFragment(result);
+    public HistoryFragment(TopBuilder<TopItem> topBuilder) {
+        this.topBuilder = topBuilder;
     }
 
     @Override
@@ -37,14 +34,13 @@ public class ResultsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_results, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new ResultsAdapter(result, getLayoutInflater(), recyclerView));
+            recyclerView.setAdapter(new DecisionsAdapter(topBuilder));
         }
         return view;
     }
