@@ -25,6 +25,7 @@ import ru.zont.topbuilder.ui.data.TopItem;
 
 public class DecisionsAdapter extends RecyclerView.Adapter<DecisionsAdapter.ViewHolder> {
     private final TopBuilder<TopItem> topBuilder;
+    private OnClickListener onClickListener;
 
     public DecisionsAdapter(TopBuilder<TopItem> topBuilder) {
         this.topBuilder = topBuilder;
@@ -131,6 +132,11 @@ public class DecisionsAdapter extends RecyclerView.Adapter<DecisionsAdapter.View
             sb.append("\n");
         }
         b.decTooltip.setText(sb);
+
+        b.getRoot().setOnClickListener((v) -> {
+            if (onClickListener != null)
+                onClickListener.onClick(entry, position);
+        });
     }
 
     @Override
@@ -150,5 +156,13 @@ public class DecisionsAdapter extends RecyclerView.Adapter<DecisionsAdapter.View
     @SuppressLint("DefaultLocale")
     private static String setw(String s, int w) {
         return String.format(String.format("%%%ds", w), s);
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    interface OnClickListener {
+        void onClick(DecisionEntry<TopItem> entry, int pos);
     }
 }

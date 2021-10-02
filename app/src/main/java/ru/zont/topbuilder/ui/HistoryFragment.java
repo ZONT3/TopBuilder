@@ -19,6 +19,8 @@ import ru.zont.topbuilder.ui.data.TopItem;
 public class HistoryFragment extends Fragment {
 
     private TopBuilder<TopItem> topBuilder;
+    private DecisionsAdapter adapter;
+    private DecisionsAdapter.OnClickListener onItemClickListener;
 
     public HistoryFragment() { }
 
@@ -40,8 +42,17 @@ public class HistoryFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new DecisionsAdapter(topBuilder));
+
+            adapter = new DecisionsAdapter(topBuilder);
+            adapter.setOnClickListener(onItemClickListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
+    }
+
+    public void setOnItemClickListener(DecisionsAdapter.OnClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        if (adapter != null)
+            adapter.setOnClickListener(this.onItemClickListener);
     }
 }

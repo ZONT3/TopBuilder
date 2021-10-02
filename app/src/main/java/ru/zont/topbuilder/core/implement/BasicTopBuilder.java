@@ -66,13 +66,19 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
         if (i > history.size()) throw new IllegalArgumentException("Out of range");
         needRebuild = false;
 
+        final DecisionEntry<T> toChange = history.get(i);
         final int trimSize = history.size() - i;
         final List<DecisionEntry<T>> later = cutHistory(trimSize);
+
         undo(trimSize);
+        next((lhs, rhs) -> {
+            if (toChange.getRhs() != rhs || toChange.getLhs() != lhs)
+                needRebuild = true;
+        });
+        if (needRebuild) return false;
 
         provideDecision(newDecision);
-        for (int j = 1; j < later.size(); j++) {
-            if (needRebuild) return false;
+        for (int j = 0; j < later.size(); j++) {
             final DecisionEntry<T> curr = later.get(j);
             next((lhs, rhs) -> {
                 if (curr.getLhs() != lhs || curr.getRhs() != rhs) {
@@ -82,10 +88,17 @@ public abstract class BasicTopBuilder<T> implements TopBuilder<T> {
                     provideDecision(curr.getDecision());
                 }
             });
+            if (needRebuild) return false;
         }
         return true;
     }
 
+    /**
+     * Try to automatically provide decision
+     * Can be used only after {@link BasicTopBuilder#changeDecision(int, int)}
+     * Calls {@link BasicTopBuilder#next(Supplier)} internally.
+     * @return true, if decision has been successfully auto-provided.
+     */
     public boolean tryAutoDecision() {
         if (autoProvide == null)
             return false;
