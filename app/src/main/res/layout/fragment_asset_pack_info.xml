@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/pinf_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            tools:text="Asset Pack Title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/constraintLayout">
+
+        <ImageView
+                android:id="@+id/dec_rhs"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dec_lhs"
+                app:layout_constraintTop_toTopOf="@+id/dec_lhs"
+                tools:srcCompat="@tools:sample/avatars"
+                app:layout_constraintStart_toEndOf="@+id/dec_weight" />
+
+        <ImageView
+                android:id="@+id/dec_lhs"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+                android:id="@+id/dec_chev_lhs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/dec_lhs"
+                app:layout_constraintStart_toEndOf="@+id/dec_lhs"
+                app:layout_constraintTop_toTopOf="@+id/dec_lhs"
+                app:srcCompat="@drawable/baseline_chevron_left_18" />
+
+        <TextView
+                android:id="@+id/dec_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dec_lhs"
+                app:layout_constraintStart_toEndOf="@+id/dec_chev_lhs"
+                app:layout_constraintTop_toTopOf="@+id/dec_lhs"
+                tools:text="13" />
+
+        <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/dec_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="dec_lhs,dec_chev_lhs,dec_rhs,dec_weight"
+                tools:layout_editor_absoluteX="411dp"
+                tools:layout_editor_absoluteY="31dp" />
+
+        <TextView
+                android:id="@+id/dec_tooltip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="serif"
+                android:gravity="center|start"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dec_barrier"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Unfinished Top"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/pinf_title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            tools:text="Builded / unfinished tops" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/constraintLayout1">
+
+        <ImageView
+                android:id="@+id/dec_rhs1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dec_lhs1"
+                app:layout_constraintTop_toTopOf="@+id/dec_lhs1"
+                tools:srcCompat="@tools:sample/avatars"
+                app:layout_constraintStart_toEndOf="@+id/dec_lhs1" />
+
+        <ImageView
+                android:id="@+id/dec_lhs1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+                android:id="@+id/dec_lhs2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars"
+                app:layout_constraintStart_toEndOf="@+id/dec_rhs1" />
+
+        <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/dec_barrier1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="dec_lhs1,dec_rhs1,dec_lhs2"
+                tools:layout_editor_absoluteX="411dp"
+                tools:layout_editor_absoluteY="31dp" />
+
+        <TextView
+                android:id="@+id/dec_tooltip1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="serif"
+                android:gravity="center|start"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dec_barrier1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Top #1\n09.08.22"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            android:id="@+id/floatingActionButton2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@android:drawable/ic_media_play"
+            android:id="@+id/floatingActionButton3"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        providedList = tempList3();
+        providedList = tempList2();
 
         binding.btW.setOnClickListener(v -> onClickButton(new WeightTopBuilderInfo()));
         binding.btE.setOnClickListener(v -> onClickButton(new EloTopBuilderInfo()));
